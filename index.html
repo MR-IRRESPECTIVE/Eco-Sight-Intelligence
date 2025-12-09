@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Eco-Sight Intelligence</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&family=Orbitron:wght@500;700&display=swap" rel="stylesheet">
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <nav class="glass-nav">
+        <div class="logo">
+            <i class="fa-solid fa-leaf"></i> Eco-Sight <span class="highlight">Intelligence</span>
+        </div>
+        <div class="location-badge" id="location-display">
+            <i class="fa-solid fa-location-dot"></i> Detecting Location...
+        </div>
+    </nav>
+
+    <div class="main-container">
+
+        <section id="weather-section" class="glass-card">
+            <h2><i class="fa-solid fa-cloud-bolt"></i> Atmosphere Hub</h2>
+            <div class="metrics-grid">
+                <div class="metric-box">
+                    <span class="label">Temperature</span>
+                    <span class="value" id="temp-val">--°C</span>
+                </div>
+                <div class="metric-box">
+                    <span class="label">Humidity</span>
+                    <span class="value" id="humid-val">--%</span>
+                </div>
+                <div class="metric-box">
+                    <span class="label">Wind</span>
+                    <span class="value" id="wind-val">-- km/h</span>
+                </div>
+            </div>
+            <div class="chart-container">
+                <canvas id="rainfallChart"></canvas>
+            </div>
+        </section>
+
+        <section id="ghg-section" class="glass-card">
+            <h2><i class="fa-solid fa-smog"></i> Air Quality & GHG</h2>
+            <div class="metrics-grid">
+                <div class="metric-box danger">
+                    <span class="label">PM 2.5</span>
+                    <span class="value" id="pm25-val">--</span>
+                </div>
+                <div class="metric-box">
+                    <span class="label">NO2</span>
+                    <span class="value" id="no2-val">--</span>
+                </div>
+            </div>
+            <div class="chart-container">
+                <canvas id="airQualityRadar"></canvas>
+            </div>
+        </section>
+
+        <section id="carbon-section" class="glass-card">
+            <h2><i class="fa-solid fa-tree"></i> Sequestration Calculator</h2>
+            <div class="calculator-controls">
+                <div class="input-group">
+                    <label>Trees Planted: <span id="tree-count">0</span></label>
+                    <input type="range" id="treeInput" min="0" max="1000" value="0">
+                </div>
+                <div class="input-group">
+                    <label>Soil Area (sq ft): <span id="soil-count">0</span></label>
+                    <input type="range" id="soilInput" min="0" max="5000" value="0">
+                </div>
+            </div>
+            <div class="result-display">
+                <span class="big-number" id="sequestrationResult">0.00</span>
+                <span class="unit">Tonnes CO2 / Year</span>
+            </div>
+        </section>
+
+        <section id="bio-section" class="glass-card">
+            <h2><i class="fa-solid fa-seedling"></i> Indoor Bio-Engine</h2>
+            <div class="select-wrapper">
+                <select id="plantSelector">
+                    <option value="" disabled selected>Select a Plant...</option>
+                    <option value="snake">Snake Plant (Sansevieria)</option>
+                    <option value="areca">Areca Palm</option>
+                    <option value="spider">Spider Plant</option>
+                    <option value="peace">Peace Lily</option>
+                </select>
+            </div>
+            <div id="plantStats" class="plant-stats hidden">
+                <div class="stat-row">
+                    <span>CO2 Absorption:</span>
+                    <strong id="p-co2">--</strong>
+                </div>
+                <div class="stat-row">
+                    <span>Oxygen Output:</span>
+                    <strong id="p-o2">--</strong>
+                </div>
+                <div class="stat-row">
+                    <span>Best For:</span>
+                    <strong id="p-best">--</strong>
+                </div>
+            </div>
+        </section>
+
+        <section id="pollution-section" class="glass-card wide-card">
+            <h2><i class="fa-solid fa-shoe-prints"></i> Pollution Footprint Calculator</h2>
+            <p style="margin-bottom: 1.5rem; color: #666; font-size: 0.9rem;">Answer accurately to receive a personalized action plan.</p>
+            
+            <div class="poll-container">
+                <div class="question-block">
+                    <label class="question-label">1. Primary Mode of Transport</label>
+                    <div class="options-grid" id="q1-options">
+                        <button class="option-btn" data-score="40" data-tip="Switching to public transport or carpooling just 2 days a week saves ~1.5 tonnes of CO2/year.">Private Car / Bike</button>
+                        <button class="option-btn" data-score="15" data-tip="Consider cycling or walking for short 'last-mile' commutes.">Bus / Metro / Shared</button>
+                        <button class="option-btn" data-score="0">Bicycle / Walk / EV</button>
+                    </div>
+                </div>
+
+                <div class="question-block">
+                    <label class="question-label">2. Daily Energy & AC Usage (Summer)</label>
+                    <div class="options-grid" id="q2-options">
+                        <button class="option-btn" data-score="0">Fan Only / No AC</button>
+                        <button class="option-btn" data-score="15" data-tip="Set your AC to 24°C instead of 18°C to save 6% electricity per degree.">Low (Night Only)</button>
+                        <button class="option-btn" data-score="30" data-tip="Use 'Eco Mode' and timers to reduce AC runtime during the day.">High (Day & Night)</button>
+                    </div>
+                </div>
+
+                <div class="question-block">
+                    <label class="question-label">3. Single-Use Plastic Consumption</label>
+                    <div class="options-grid" id="q3-options">
+                        <button class="option-btn" data-score="0">Never / Reusable Only</button>
+                        <button class="option-btn" data-score="10" data-tip="Carry a folded tote bag in your backpack to avoid impromptu plastic bags.">Sometimes</button>
+                        <button class="option-btn" data-score="20" data-tip="Switch to a metal water bottle and avoid plastic cutlery.">Daily / Often</button>
+                    </div>
+                </div>
+
+                <button id="calculate-footprint-btn" class="action-btn">Calculate Impact</button>
+                
+                <div id="footprint-result" class="result-display hidden" style="margin-top: 1.5rem;">
+                    <span class="label">Your Pollution Score:</span>
+                    <strong class="big-number" id="impact-score">--</strong>
+                    <p id="impact-message" style="margin-top: 0.5rem; font-weight: 500;">--</p>
+                    
+                    <div id="tips-box" class="tips-container hidden">
+                        <h4><i class="fa-solid fa-lightbulb"></i> Ways to Improve:</h4>
+                        <ul id="tips-list"></ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>
